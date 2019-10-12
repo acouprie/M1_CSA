@@ -1,0 +1,31 @@
+The problem with variables is that they only exist in RAM. Once your program is stopped, all your variables
+are removed from the memory and you can not find their value again. Fortunately, in C you can read and
+write in files. These files will be written to your computer's hard drive, so they stay there, even if you stop
+the program or computer.
+To read and write to files, we will use functions located in the library stdio. Here's the sequence of steps to
+do when you want to open a file, whether to read it or to write on it :
+1. We call the “file open” function fopen, which returns a pointer to the file;
+FILE* fopen(const char* fileName, const char* mode);
+This function returns a pointer to FILE. The pointer is initialized to NULL. The mode says what you want to do
+with the file: just write to the file (“w”), just read it (“r”), or both at once (“r+”). Other modes exist.
+2. We check if the opening was successful (that is to say if the file existed) by testing the value of the
+pointer we received. If the pointer is null, it means that the opening of the file did not work, in this
+case we can not continue (it is necessary to display an error message);
+3. If the opening has worked (if the pointer is different from null), then we can read and write in the
+file through functions that we will see a little further;
+4. Once you have finished working on the file, you have to close it with the function fclose.
+The file “test.txt” should be in the same folder of the program. Otherwise, the complet path should be
+specified (the default of absolute paths is that they only work on a specific OS ).
+Reading a file : We'll see three functions to read files :
+- fgetc: read an unsigned char cast to an int, or EOF on end of file or error. I t advances the cursor of a
+character each time you read one.
+int fgetc(FILE* filePointer) ;
+10- fgets: read a chain of characters. The function stops reading the line if it contains more than
+nbOfCharactersToRead characters. It reads at most one line (it stops at the first \n it meets) . It returns
+NULL if it failed to read what you requested.
+char* fgets(char* chain, int nbOfCharactersToRead, FILE* filePointer);
+- fscanf: read a formated chain of characters. If you would like to retrieve some numbers in a int variable :
+FILE* fichier = NULL;
+int score[3] = {0};
+fichier = fopen("test.txt", "r");
+fscanf(file, "%d %d %d", &score[0], &score[1], &score[2]);
