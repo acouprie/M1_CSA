@@ -31,38 +31,39 @@ public class AdvancedExercises {
         System.out.println("You tried more than 5 times. You loose.");
     }
 
-    public static void drawHangman(int numberOfTries) {
-        switch (numberOfTries) {
-            case 1:
-                break;
-            case 2:
-                break;
-            default:
-                break;
-        }
-    }
-
     public static void hangman() {
         System.out.println("Hanging game !");
 
         Random rand = new Random();
         Scanner scan = new Scanner(System.in);
         String words[] = {"house", "dog"};
+        int life = 8;
+        char input;
 
         int index = rand.nextInt(words.length);
         String mysteryWord = words[index];
+        char hiddenWord[] = new char[mysteryWord.length()];
+
         for (int i = 0; i < mysteryWord.length(); i++) {
-            System.out.print("_ ");
+            hiddenWord[i] = '_';
+            System.out.print(hiddenWord[i] + " ");
         }
 
-        System.out.println("\nEnter a letter:");
-        char input = scan.findInLine(".").charAt(0);
+        for (int l = 0; l < life; l++) {
+            System.out.println("\nEnter a letter (lowercase):");
+            input = scan.nextLine().charAt(0);
+            for (int i = 0; i < mysteryWord.length(); i++) {
+                if (mysteryWord.charAt(i) == input) {
+                    hiddenWord[i] = input;
+                }
+            }
 
-        for (int i = 0; i < mysteryWord.length(); i++) {
-            if (mysteryWord.charAt(i) != input) {
-                System.out.print("_ ");
-            } else {
-                System.out.print(mysteryWord.charAt(i) + " ");
+            String convertHiddenWord = new String(hiddenWord);
+            System.out.println(convertHiddenWord);
+            System.out.println(mysteryWord);
+            if(convertHiddenWord == mysteryWord) {
+                System.out.println("You win !");
+                break;
             }
         }
     }
