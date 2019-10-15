@@ -8,6 +8,7 @@ public class Main {
         //FlowControl.conditional1();
         //FlowControl.conditional2();
         //FlowControl.loop1();
-        FlowControl.loop2();
+        //FlowControl.loop2();
+        FlowControl.loop3();
     }
 }

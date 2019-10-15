@@ -64,5 +64,25 @@ public class FlowControl {
             System.out.println("\n");
         }
     }
+
+    public static void loop3() {
+        System.out.println("Enter a number of rows:");
+        Scanner scan = new Scanner(System.in);
+        int numberOfRows = scan.nextInt();
+        int numberOfSpace = numberOfRows;
+        int numberOfStars = 1;
+
+        for (int i = 0; i < numberOfRows; i++) {
+            for (int j = 0; j < numberOfSpace-1; j++) {
+                System.out.print(" ");
+            }
+            for (int j = 0; j < numberOfStars*2-1; j++) {
+                System.out.print("*");
+            }
+            System.out.println("\n");
+            numberOfSpace--;
+            numberOfStars++;
+        }
+    }
 }
 
