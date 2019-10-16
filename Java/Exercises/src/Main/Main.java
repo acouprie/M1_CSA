@@ -14,6 +14,8 @@ public class Main {
         //FlowControl.loop3();
         //StringCharOperations.removeVowels();
         //AdvancedExercises.guessNumber();
-        AdvancedExercises.hangman();
+        //AdvancedExercises.hangman();
+        //AdvancedExercises.packageRiceBag();
+        AdvancedExercises.rockPaperScissor();
     }
 }
