@@ -3,6 +3,7 @@ import KeyboardInput.*;
 import FlowControl.*;
 import StringCharOperations.*;
 import AdvancedExercises.*;
+import CalculatorPackage.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,6 +17,7 @@ public class Main {
         //AdvancedExercises.guessNumber();
         //AdvancedExercises.hangman();
         //AdvancedExercises.packageRiceBag();
-        AdvancedExercises.rockPaperScissor();
+        //AdvancedExercises.rockPaperScissor();
+        Calculator c = new Calculator();
     }
 }
