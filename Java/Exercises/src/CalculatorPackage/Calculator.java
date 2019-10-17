@@ -1,8 +1,12 @@
 package CalculatorPackage;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+
+import static java.lang.Character.isDigit;
 
 public class Calculator {
     private JButton buttonPlus;
@@ -22,6 +26,39 @@ public class Calculator {
     private JButton buttonDivide;
     private JTextPane result;
     private JPanel Calc;
+
+    public int compute(String calculus) {
+        int result = 0;
+        StringBuilder buffer = new StringBuilder();
+        Integer first_operand = null;
+        Integer second_operand = null;
+        char operation = '+';
+
+        for (int i = 0; i < calculus.length(); i++) {
+            if (isDigit(calculus.charAt(i))) {
+                buffer.append(calculus.charAt(i));
+            } else {
+                if(first_operand == null) {
+                    operation = calculus.charAt(i);
+                    first_operand = Integer.parseInt(buffer.toString());
+                    buffer = new StringBuilder();
+                } else {
+                    second_operand = Integer.parseInt(buffer.toString());
+                }
+            }
+        }
+
+        if (operation == '+') {
+            result = first_operand + second_operand;
+        } else if (operation == '*') {
+            result = first_operand * second_operand;
+        } else if (operation == '/') {
+            result = first_operand / second_operand;
+        } else if (operation == '-') {
+            result = first_operand - second_operand;
+        }
+        return result;
+    }
 
     public Calculator() {
         JFrame frame = new JFrame("Calculator");
@@ -43,14 +80,12 @@ public class Calculator {
             }
         });
 
-
         a2Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 result.setText(result.getText() + a2Button.getText());
             }
         });
-
 
         a3Button.addActionListener(new ActionListener() {
             @Override
@@ -133,6 +168,8 @@ public class Calculator {
             @Override
             public void actionPerformed(ActionEvent e) {
                 result.setText(result.getText() + buttonEqual.getText());
+                String calculus = result.getText();
+                result.setText(Integer.toString(compute(calculus)));
             }
         });
     }
