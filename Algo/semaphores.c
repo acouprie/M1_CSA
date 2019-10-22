@@ -209,3 +209,26 @@ void TakeShuttle() {
 void GiveBackWing() {
     V(wings);
 }
+
+// Consumer - Producer
+
+Semaphore (emptySpace, waitForDataInBuffer);
+init(emptySpace, 1);
+init(waitForDataInBuffer, n);
+
+Producer() {
+    P(emptySpace);
+    // produce
+    V(waitForDataInBuffer);
+}
+
+Consumer(){
+    P(waitForDataInBuffer);
+    // consume
+    V(emptySpace);
+}
+
+/*
+For next time:
+Study monitors (lecture and exercises)
+*/
