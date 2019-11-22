@@ -1,0 +1,4 @@
+smalltalk with style
+C++ coding standards
+Analysis Patterns
+Design Patterns
