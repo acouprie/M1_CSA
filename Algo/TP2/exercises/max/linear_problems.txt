@@ -1,0 +1,26 @@
+III] Linear Programming Problems
+A) Transportation problem : (continued)
+
+Minimize z = 4a+3b+6c+3d+5e+3f subject to
+a+b+c <= 100
+d+e+f <= 150
+a+d = 50
+b+e = 70
+c+f = 80
+
+Optimal solution: z = 600; a = 0, b = 70, c = 0, d = 50, e = 0, f = 80
+
+B) Elections
+
+Minimize z = 10000t + 7000r + 5000p subject to
+5t + 2r + p >= 195
+12t + 15r + 5p >= 585
+2t + 2r + 3p >= 260
+
+5t + 2r + p <= 300
+12t + 15r + 5p <= 1300
+2t + 2r + 3p <= 2600
+
+3r + 3p - t >= 0
+
+Optimal solution: z = 600000; p = 70, r = 0, t = 25

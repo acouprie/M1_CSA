@@ -1,0 +1,8 @@
+Complexity:
+Bubble sort O(nk)
+
+Space complexity of Binary Heap:
+Θ(1)
+
+Time complexity of the extraction of Binary Heap:
+Θ(n)
