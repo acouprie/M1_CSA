@@ -4,7 +4,7 @@
 
 void exercise_1(void) {
     // Version 1
-    // Tow threads write on a screen 10 messages ("Im process 0", "Im process 1") in an alternate manner
+    // Two threads write on a screen 10 messages ("Im process 0", "Im process 1") in an alternate manner
     Mutex m1, m2;
     init(m1, 1);
     init(m2, 0);

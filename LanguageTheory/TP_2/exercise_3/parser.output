@@ -1,0 +1,93 @@
+   0  $accept : %entry% $end
+
+   1  sp : s EOF
+
+   2  s : A u B
+
+   3  u : C
+   4    | u C
+
+   5  %entry% : '\001' sp
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . sp  (5)
+
+	A  shift 3
+	.  error
+
+	sp  goto 4
+	s  goto 5
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	s : A . u B  (2)
+
+	C  shift 6
+	.  error
+
+	u  goto 7
+
+
+state 4
+	%entry% : '\001' sp .  (5)
+
+	.  reduce 5
+
+
+state 5
+	sp : s . EOF  (1)
+
+	EOF  shift 8
+	.  error
+
+
+state 6
+	u : C .  (3)
+
+	.  reduce 3
+
+
+state 7
+	s : A u . B  (2)
+	u : u . C  (4)
+
+	B  shift 9
+	C  shift 10
+	.  error
+
+
+state 8
+	sp : s EOF .  (1)
+
+	.  reduce 1
+
+
+state 9
+	s : A u B .  (2)
+
+	.  reduce 2
+
+
+state 10
+	u : u C .  (4)
+
+	.  reduce 4
+
+
+7 terminals, 5 nonterminals
+6 grammar rules, 11 states

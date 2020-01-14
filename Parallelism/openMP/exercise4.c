@@ -10,15 +10,15 @@ int main(){
     int maxi = v[0];
     int max[NUM_THREADS] = {0};
     #pragma omp parallel num_threads(NUM_THREADS)
-        int id = omp_get_thread_num();
-        #pragma omp for
-        for (int i = 0; i < ARRAY_SIZE; i++)
+    int id = omp_get_thread_num();
+    #pragma omp for
+    for (int i = 0; i < ARRAY_SIZE; i++)
+    {
+        if (v[i] > max[id])
         {
-            if (v[i] > max[id])
-            {
-                max[id] = v[i];
-            }
+            max[id] = v[i];
         }
+    }
     // only one thread remains
     for (int i = 0; i < NUM_THREADS; i++)
     {

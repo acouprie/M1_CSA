@@ -10,13 +10,13 @@ int main(){
     int maxi = v[0];
     int max[NUM_THREADS] = {0};
     #pragma omp parallel
-        #pragma omp for reduction(max : maxi)
-        for (int i = 0; i < ARRAY_SIZE; i++) {
-            if (maxi < v[i])
-            {
-                maxi = v[i];
-            }
+    #pragma omp for reduction(max : maxi)
+    for (int i = 0; i < ARRAY_SIZE; i++) {
+        if (maxi < v[i])
+        {
+            maxi = v[i];
         }
+    }
     
     printf("%i \n", maxi);
     return(maxi);

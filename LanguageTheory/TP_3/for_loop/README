@@ -1,0 +1,17 @@
+These parser/scanner allow to analyse the subset of these instructions:
+<statlist>   ::= <stat> | <stat> ; <statlist> 
+<stat>	     ::= ...| <forstat> | <affectstat>
+<affectstat> ::= ident := <exp>
+
+Variables declaration are ignored, constants are only integers, types are  not checked. The main goal is to generate quadruplets.
+The lexer.mll is minimal (+ and * but neither - nor /) in order to analyse an example such as "exStatlist.c".
+
+Very few external function calls in lang.ml 
+
+<expr> result is a couple : name of the register and the quad list
+
+In Ocaml (in lang.ml), there are imperative instructions ("!" and ";") to obtain the quadruplet list as a global variable.
+
+
+
+

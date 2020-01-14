@@ -1,0 +1,336 @@
+   0  $accept : %entry% $end
+
+   1  forstat : forpart1 DO statlist ENDLOOP
+
+   2  forpart1 : FOR ident AFFECT expr STEP expr UNTIL expr
+
+   3  statlist : EOF
+   4           | stat
+   5           | stat ENDINSTR statlist
+
+   6  stat : affectstat
+   7       | forstat
+
+   8  affectstat : ident AFFECT expr
+
+   9  expr : ident
+  10       | term
+  11       | expr PLUS expr
+  12       | expr TIMES expr
+
+  13  ident : IDENTIFIER
+
+  14  term : INTCONST
+
+  15  %entry% : '\001' statlist
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . statlist  (15)
+
+	IDENTIFIER  shift 3
+	EOF  shift 4
+	FOR  shift 5
+	.  error
+
+	ident  goto 6
+	statlist  goto 7
+	forstat  goto 8
+	forpart1  goto 9
+	stat  goto 10
+	affectstat  goto 11
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	ident : IDENTIFIER .  (13)
+
+	.  reduce 13
+
+
+state 4
+	statlist : EOF .  (3)
+
+	.  reduce 3
+
+
+state 5
+	forpart1 : FOR . ident AFFECT expr STEP expr UNTIL expr  (2)
+
+	IDENTIFIER  shift 3
+	.  error
+
+	ident  goto 12
+
+
+state 6
+	affectstat : ident . AFFECT expr  (8)
+
+	AFFECT  shift 13
+	.  error
+
+
+state 7
+	%entry% : '\001' statlist .  (15)
+
+	.  reduce 15
+
+
+state 8
+	stat : forstat .  (7)
+
+	.  reduce 7
+
+
+state 9
+	forstat : forpart1 . DO statlist ENDLOOP  (1)
+
+	DO  shift 14
+	.  error
+
+
+state 10
+	statlist : stat .  (4)
+	statlist : stat . ENDINSTR statlist  (5)
+
+	ENDINSTR  shift 15
+	$end  reduce 4
+	ENDLOOP  reduce 4
+
+
+state 11
+	stat : affectstat .  (6)
+
+	.  reduce 6
+
+
+state 12
+	forpart1 : FOR ident . AFFECT expr STEP expr UNTIL expr  (2)
+
+	AFFECT  shift 16
+	.  error
+
+
+state 13
+	affectstat : ident AFFECT . expr  (8)
+
+	INTCONST  shift 17
+	IDENTIFIER  shift 3
+	.  error
+
+	term  goto 18
+	ident  goto 19
+	expr  goto 20
+
+
+state 14
+	forstat : forpart1 DO . statlist ENDLOOP  (1)
+
+	IDENTIFIER  shift 3
+	EOF  shift 4
+	FOR  shift 5
+	.  error
+
+	ident  goto 6
+	statlist  goto 21
+	forstat  goto 8
+	forpart1  goto 9
+	stat  goto 10
+	affectstat  goto 11
+
+
+state 15
+	statlist : stat ENDINSTR . statlist  (5)
+
+	IDENTIFIER  shift 3
+	EOF  shift 4
+	FOR  shift 5
+	.  error
+
+	ident  goto 6
+	statlist  goto 22
+	forstat  goto 8
+	forpart1  goto 9
+	stat  goto 10
+	affectstat  goto 11
+
+
+state 16
+	forpart1 : FOR ident AFFECT . expr STEP expr UNTIL expr  (2)
+
+	INTCONST  shift 17
+	IDENTIFIER  shift 3
+	.  error
+
+	term  goto 18
+	ident  goto 19
+	expr  goto 23
+
+
+state 17
+	term : INTCONST .  (14)
+
+	.  reduce 14
+
+
+state 18
+	expr : term .  (10)
+
+	.  reduce 10
+
+
+state 19
+	expr : ident .  (9)
+
+	.  reduce 9
+
+
+state 20
+	affectstat : ident AFFECT expr .  (8)
+	expr : expr . PLUS expr  (11)
+	expr : expr . TIMES expr  (12)
+
+	PLUS  shift 24
+	TIMES  shift 25
+	$end  reduce 8
+	ENDINSTR  reduce 8
+	ENDLOOP  reduce 8
+
+
+state 21
+	forstat : forpart1 DO statlist . ENDLOOP  (1)
+
+	ENDLOOP  shift 26
+	.  error
+
+
+state 22
+	statlist : stat ENDINSTR statlist .  (5)
+
+	.  reduce 5
+
+
+state 23
+	forpart1 : FOR ident AFFECT expr . STEP expr UNTIL expr  (2)
+	expr : expr . PLUS expr  (11)
+	expr : expr . TIMES expr  (12)
+
+	PLUS  shift 24
+	TIMES  shift 25
+	STEP  shift 27
+	.  error
+
+
+state 24
+	expr : expr PLUS . expr  (11)
+
+	INTCONST  shift 17
+	IDENTIFIER  shift 3
+	.  error
+
+	term  goto 18
+	ident  goto 19
+	expr  goto 28
+
+
+state 25
+	expr : expr TIMES . expr  (12)
+
+	INTCONST  shift 17
+	IDENTIFIER  shift 3
+	.  error
+
+	term  goto 18
+	ident  goto 19
+	expr  goto 29
+
+
+state 26
+	forstat : forpart1 DO statlist ENDLOOP .  (1)
+
+	.  reduce 1
+
+
+state 27
+	forpart1 : FOR ident AFFECT expr STEP . expr UNTIL expr  (2)
+
+	INTCONST  shift 17
+	IDENTIFIER  shift 3
+	.  error
+
+	term  goto 18
+	ident  goto 19
+	expr  goto 30
+
+
+state 28
+	expr : expr . PLUS expr  (11)
+	expr : expr PLUS expr .  (11)
+	expr : expr . TIMES expr  (12)
+
+	TIMES  shift 25
+	$end  reduce 11
+	PLUS  reduce 11
+	ENDINSTR  reduce 11
+	STEP  reduce 11
+	UNTIL  reduce 11
+	DO  reduce 11
+	ENDLOOP  reduce 11
+
+
+state 29
+	expr : expr . PLUS expr  (11)
+	expr : expr . TIMES expr  (12)
+	expr : expr TIMES expr .  (12)
+
+	.  reduce 12
+
+
+state 30
+	forpart1 : FOR ident AFFECT expr STEP expr . UNTIL expr  (2)
+	expr : expr . PLUS expr  (11)
+	expr : expr . TIMES expr  (12)
+
+	PLUS  shift 24
+	TIMES  shift 25
+	UNTIL  shift 31
+	.  error
+
+
+state 31
+	forpart1 : FOR ident AFFECT expr STEP expr UNTIL . expr  (2)
+
+	INTCONST  shift 17
+	IDENTIFIER  shift 3
+	.  error
+
+	term  goto 18
+	ident  goto 19
+	expr  goto 32
+
+
+state 32
+	forpart1 : FOR ident AFFECT expr STEP expr UNTIL expr .  (2)
+	expr : expr . PLUS expr  (11)
+	expr : expr . TIMES expr  (12)
+
+	PLUS  shift 24
+	TIMES  shift 25
+	DO  reduce 2
+
+
+16 terminals, 10 nonterminals
+16 grammar rules, 33 states

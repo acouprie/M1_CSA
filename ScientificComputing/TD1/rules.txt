@@ -1,0 +1,35 @@
+Project 2019
+
+Part I
+
+numerical sequence (vector)
+DNA sequence
+voice with letters
+
+Part II : Audio control word recognition system
+
+Frequency => Cepstral coefficient (MFCC coefficient)
+Toolbox librosa
+# windows * 12 => apply DTW
+
+- Choose your own study:
+Use corpus with french records and compare your own voice
+
+Learning basis (set) 10 files (orders)
+Test basis (set) 5 files (orders)
+
+Evaluation criterion via confusion matrix (Scipit-learn)
+Nearest neighboors
+
+Part III
+
+Comparaison with a PCA reduction and key nearest neighboors
+Make the average of all 12 windows
+PCA is only computed on learning set
+Plot the learning set
+
+Deliver:
+
+Group:
+Notebook
+Study

@@ -17,7 +17,7 @@ Monitor HandleRequest {
     // Optional: Order orders[NB_COUNTERS]; to keep a trace of orders to know which one to process instead of isProcessed
     // Conditions
     counterFree // a queue for clients for having a counter
-    orderBeingProcesses[NB_COUNTERS]; // a queue for clients to wait their order done
+    orderBeingProcessed[NB_COUNTERS]; // a queue for clients to wait their order done
     employeeWaiting[NB_STEPS]; // employees waiting for working
 }
 
