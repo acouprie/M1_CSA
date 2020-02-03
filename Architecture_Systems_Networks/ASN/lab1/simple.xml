@@ -1,0 +1,5 @@
+<board name="Board1" version="0.1" class="rer" w="400" h="500">
+
+	<component class="ARM" name="ARM" x="10" y="5"/>
+	
+</board>
