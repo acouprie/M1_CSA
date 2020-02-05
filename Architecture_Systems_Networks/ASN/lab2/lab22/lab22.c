@@ -2,7 +2,7 @@
 #include "../at91sam7s.h"
 
 #define DELAY_IN_PULSES 62500
-int i, s = 0;
+int s = 0;
 
 void __attribute__ ((interrupt("IRQ"))) handle_pio(void) {
     int v;

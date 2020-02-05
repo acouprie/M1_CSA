@@ -2,7 +2,7 @@
 #include "../at91sam7s-term.h"
 
 #define DELAY_IN_PULSES 31250
-int gameOn = 0, nbClick = 0, seconds = 0;
+int gameOn = 0, seconds = 0;
 
 void putc(char c) {
     while(!(US0_CSR && US_TXRDY));
