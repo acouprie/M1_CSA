@@ -1,0 +1,24 @@
+Exercise 2:
+With only the -p option the outputs are not similar.
+With only the -p -n3 option the outputs are similar.
+
+Exercise 4:
+It says:
+"Always different of p[0] and p[1] in the critical section at the same time."
+
+Exercise 5:
+I added the following lines at the end of the promela file:
+
+"ltl excl0 { [] !(p[0]@cs && p[1]@cs) }
+ltl excl1 { [] !(p[0]@cs) }
+ltl excl2 { [] <> (p[0]@cs || p[1]@cs) }"
+
+Running the following command:
+# ./pan -a -N excl1
+
+Output 
+"pan: ltl formula excl1
+pan:1: assertion violated  !( !( !((p[0]._p==cs)))) (at depth 13)
+pan: wrote promela.pml.trail"
+
+So excl2 is violated.

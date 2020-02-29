@@ -1,0 +1,29 @@
+never excl0 {    /* !([] (! (((p[0]@cs)) && ((p[1]@cs))))) */
+T0_init:
+	do
+	:: atomic { (! ((! (((p[0]@cs)) && ((p[1]@cs)))))) -> assert(!(! ((! (((p[0]@cs)) && ((p[1]@cs))))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}
+never excl1 {    /* !([] (! ((p[0]@cs)))) */
+T0_init:
+	do
+	:: atomic { (! ((! ((p[0]@cs))))) -> assert(!(! ((! ((p[0]@cs)))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}
+never excl2 {    /* !([] (<> (((p[0]@cs)) || ((p[1]@cs))))) */
+T0_init:
+	do
+	:: (! ((((p[0]@cs)) || ((p[1]@cs))))) -> goto accept_S4
+	:: (1) -> goto T0_init
+	od;
+accept_S4:
+	do
+	:: (! ((((p[0]@cs)) || ((p[1]@cs))))) -> goto accept_S4
+	od;
+}

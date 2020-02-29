@@ -1,7 +1,12 @@
 /* M1 CSA, ASN, lab 4.1 */
 #include "../at91sam7s.h"
 
+#define DELAY_IN_PULSES 31250
 #define LED	0
+#define PERIOD 100
+
+int period_pulse = MCK * PERIOD / 1000 / 8;
+float period_duration = 0.5;
 
 /**
  * Synchronously write a character to US0.
@@ -35,15 +40,56 @@ void us0_init(void) {
 	US0_TTGR = 10;
 }
 
+void set_cdty(float duration) {
+  PWM_CDTY(LED) = period_pulse * duration;
+}
+
+void __attribute__ ((interrupt("IRQ"))) handle_pio(void) {
+	int v;
+
+	if((PIO_PDSR & PUSH1) == 0) {
+    us0_puts("flag");
+    period_duration += 0.1;
+    set_cdty(period_duration);
+	}
+
+	v = PIO_ISR;
+	v = AIC_EOICR;
+}
 
 int main(void) {
-	
+  us0_init();
+
+  // Set the clock
+  TC0_CCR = TC_CLKDIS;
+  TC0_CMR = TC_TCCLKS_CLOCK3 | TC_CPCTRG;
+  TC0_RC = DELAY_IN_PULSES;
+  TC0_CCR = TC_SWTRG | TC_CLKEN;
+
 	/* initialization */
-	
-	/* main loop */
+  // PWM
+  PWM_CMR(LED) = PWM_CPRE_MCK_8 | PWM_CPOL;
+  PWM_CPRD(LED) = period_pulse;
+  set_cdty(period_duration);
+  PWM_ENA = 1 << LED;
+
+  // interrupt button
+  AIC_IDCR = 1 << ID_PIO;
+  void handle_pio(void);
+  AIC_SVR[ID_PIO] = (uint32_t)handle_pio;
+  AIC_SMR[ID_PIO] = 0;
+
+  PIO_ODR = PUSH1 | PUSH2;
+  PIO_IER = PUSH1 | PUSH2;
+
+  int x = AIC_EOICR;
+  AIC_ICCR = 1 << ID_PIO;
+  AIC_IECR = 1 << ID_PIO;
+  UNMASK_IRQ;
+
+  /* main loop */
 	while(1) {
-		
 	}
-	
+
 	return 0;
 }
