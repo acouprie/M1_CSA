@@ -7,6 +7,9 @@
 #define THM_MAX		1500
 #define THM_REF		500
 #define BOILER		1
+#define PERIOD 100
+
+int period_pulse = MCK * PERIOD / 1000 / 8;
 
 /**
  * Synchronously write a character to US0.
@@ -42,13 +45,37 @@ void us0_init(void) {
 
 
 int main(void) {
-	
-	/* initialization */
-	
+  /* initialization */
+  us0_init();
+  int temp, n = 0;
+  char str[8];
+
+  ADC_MR = ADC_PRESCAL(0x3f);
+  ADC_CHER = 1 << THM;
+	ADC_IER = ADC_EOC(THM);
+
+  PWM_CMR(BOILER) = PWM_CPRE_MCK_8 | PWM_CPOL;
+  PWM_CPRD(BOILER) = period_pulse;
+  PWM_CDTY(BOILER) = 0;
+  PWM_ENA = 1 << BOILER;
+
 	/* main loop */
 	while(1) {
+    ADC_CR = ADC_START;
+    while(!(ADC_SR & ADC_EOC(THM)));
+    temp = ADC_CDR[1];
 
+    if(temp < THM_REF) {
+      PWM_CDTY(BOILER) = period_pulse;
+    } else {
+      PWM_CDTY(BOILER) = 0;
+    }
 
+    sprintf(str, "%d", temp / 10);
+    us0_puts(str);
+    while(n < 1000000)
+      n++;
+    n = 0;
 	}
 	
 	return 0;
