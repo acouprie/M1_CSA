@@ -57,21 +57,21 @@ int main(void) {
 
   /* main loop */
 	while(1) {
-    if(press1 && ((PIO_PDSR & PUSH1) == 0)) {
+    if(!press1 && ((PIO_PDSR & PUSH1) == 0)) {
       press1 = !press1;
       if(period_duration < 1)
         period_duration += 0.1f;
       PWM_CDTY(LED) = period_pulse * period_duration;
-  	} else if (!press1 && (PIO_PDSR & PUSH1) != 0) {
+  	} else if (press1 && (PIO_PDSR & PUSH1) != 0) {
       press1 = !press1;
     }
 
-    if(press2 && ((PIO_PDSR & PUSH2) == 0)) {
+    if(!press2 && ((PIO_PDSR & PUSH2) == 0)) {
       press2 = !press2;
       if (period_duration > 0)
         period_duration -= 0.1f;
       PWM_CDTY(LED) = period_pulse * period_duration;
-  	} else if (!press2 && (PIO_PDSR & PUSH2) != 0) {
+  	} else if (press2 && (PIO_PDSR & PUSH2) != 0) {
       press2 = !press2;
     }
 	}

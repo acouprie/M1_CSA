@@ -47,12 +47,17 @@ void us0_init(void) {
 int main(void) {
   /* initialization */
   us0_init();
-  int temp, n = 0;
-  char str[8];
+  int temp, error, n = 0, is_on = 0, press = 0;
+  float p;
 
   ADC_MR = ADC_PRESCAL(0x3f);
   ADC_CHER = 1 << THM;
 	ADC_IER = ADC_EOC(THM);
+
+  PIO_PER = GREEN | YELLOW | PUSH1;
+  PIO_ODR = PUSH1;
+  PIO_OER = YELLOW | GREEN;
+  PIO_SODR = YELLOW | GREEN;
 
   PWM_CMR(BOILER) = PWM_CPRE_MCK_8 | PWM_CPOL;
   PWM_CPRD(BOILER) = period_pulse;
@@ -65,18 +70,35 @@ int main(void) {
     while(!(ADC_SR & ADC_EOC(THM)));
     temp = ADC_CDR[1];
 
-    if(temp < THM_REF) {
-      PWM_CDTY(BOILER) = period_pulse;
-    } else {
-      PWM_CDTY(BOILER) = 0;
+    if(!press && ((PIO_PDSR & PUSH1) == 0)) {
+      press = !press;
+    } else if (press && ((PIO_PDSR & PUSH1) != 0)) {
+      press = !press;
+      is_on = !is_on;
+      if (is_on) {
+        us0_puts("Start machine");
+      } else {
+        us0_puts("Machine stop");
+        PIO_SODR = YELLOW | GREEN;
+        PWM_CDTY(BOILER) = 0;
+      }
     }
 
-    sprintf(str, "%d", temp / 10);
-    us0_puts(str);
-    while(n < 1000000)
-      n++;
-    n = 0;
+    if(is_on) {
+      error = THM_REF - temp;
+      p = 1024 * error / 16;
+
+      if(temp < THM_REF) {
+        PIO_CODR = YELLOW;
+        PIO_SODR = GREEN;
+        PWM_CDTY(BOILER) = p;
+      } else {
+        PIO_SODR = YELLOW;
+        PIO_CODR = GREEN;
+        PWM_CDTY(BOILER) = 0;
+      }
+    }
+
 	}
-	
 	return 0;
 }
