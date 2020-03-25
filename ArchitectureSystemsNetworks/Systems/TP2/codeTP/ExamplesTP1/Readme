@@ -1,0 +1,4 @@
+To execute the plotter : 
+python3 plotter.py output1
+
+with the output file in the given format (see example)
