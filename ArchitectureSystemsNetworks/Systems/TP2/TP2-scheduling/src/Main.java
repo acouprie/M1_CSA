@@ -3,7 +3,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Condition;
 
 class Main {
-	public static int nbProcess = 6;
+	public static int nbProcess = 4;
+
 	public static Process processes[] = new Process[nbProcess];
     public static Lock lock = new ReentrantLock();
     public static Condition conds[] = new Condition[nbProcess];
