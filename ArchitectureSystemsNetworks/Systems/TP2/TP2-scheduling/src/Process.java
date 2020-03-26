@@ -8,24 +8,25 @@ class Process extends Thread {
     int relativeDuration = 0;
 
     public void run() {
-		for(int i=1; i<=duration; i++) {
-			relativeDuration = i;
-		    Main.lock.lock();
-		    if(Main.process != id | Main.sched) {
-				try {
-				    cond.await();
-				} catch (Exception e) {
-				    e.printStackTrace();
+        while (true) {
+			for (int i = 0; i < duration; i++) {
+				Main.lock.lock();
+				relativeDuration = i + 1;
+				if (Main.process != id | Main.sched) {
+					try {
+						cond.await();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-		    }
-		    System.out.println("Process " + id);
-		    Main.sched = true;
-		    Main.csched.signal();
-		    if (duration != relativeDuration)
-		    	Main.lock.unlock();
+				Main.sched = true;
+				Main.csched.signal();
+				if (duration != relativeDuration)
+					Main.lock.unlock();
+			}
+			Sched.n++;
+			Main.lock.unlock();
 		}
-		Sched.n += 1;
-		Main.lock.unlock();
 	}
 
     public Process(int i, Condition c, int p, int d) {

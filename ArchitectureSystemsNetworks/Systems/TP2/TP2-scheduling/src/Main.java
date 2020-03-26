@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;  // Import this class to handle errors
 
 
 class Main {
-	public static String pathname = "inputsFiles/input1";
+	public static String pathname = "inputsFiles/input_test";
 
 	public static int nbProcess, timesteps;
 	public static String algo;
@@ -23,17 +23,20 @@ class Main {
     public static boolean sched = true;
     
     public static void main(String[] args) throws InterruptedException {
+    	// Get data from the file
 		String[] raw_data = readFile(pathname).split(" ");
 		List<String> data = Arrays.asList(raw_data);
+		// Get main information
 		timesteps = Integer.parseInt(data.get(0));
 		algo = data.get(1);
 		nbProcess = Integer.parseInt(data.get(2));
-
+		// Get processes information
 		List<String> tasksDetails = new LinkedList<>(data.subList(3, data.size()));
-
+		// Create array to store the processes
 		processes = new Process[nbProcess];
+		// Create array of conditions
 		conds = new Condition[nbProcess];
-
+		// Create processes
 		try {
 			for (int i = 0; i < nbProcess; i++) {
 				conds[i] = lock.newCondition();
