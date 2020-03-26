@@ -11,13 +11,6 @@ class Sched extends Thread {
 				}
 			}
 
-			// periodicity
-			for(int j = 0; j < Main.nbProcess; j++) {
-				//if(timestep != 0 && Main.processes[j].periodicity % timestep == 0 && ) {
-				//    Main.processes[j].start();
-				//}
-			}
-
 			// loop on the processes
 			if(n == Main.nbProcess) {
 				n = 0;
@@ -31,21 +24,18 @@ class Sched extends Thread {
 
 			// FIFO implementation
 		    // if process not finished, call it again
-		    if (currentProcess.relativeDuration != currentProcess.duration ||
-					i % currentProcess.periodicity == 0) {
+		    if (currentProcess.relativeDuration <= currentProcess.duration) {
 		    	timesteps++;
 				System.out.println(i + " " + currentProcess.id);
 				Main.conds[Main.process].signal();
 			} else {
 				System.out.println(i + " -");
 			}
-
 			Main.lock.unlock();
 		}
 
 		// print violations and timesteps used
-		System.out.print(violations + " ");
-		System.out.print(timesteps);
+		System.out.print("violation: " + violations + " timesteps: " + timesteps);
     }
 }
 		

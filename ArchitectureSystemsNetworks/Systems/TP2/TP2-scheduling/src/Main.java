@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;  // Import this class to handle errors
 
 
 class Main {
+	//public static String pathname = "inputsFiles/input1";
 	public static String pathname = "inputsFiles/input_test";
 
 	public static int nbProcess, timesteps;
