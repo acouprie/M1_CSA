@@ -1,7 +1,3 @@
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.Condition;
-
 class Sched extends Thread {
 	public static int n = 0;
 	public void run() {
@@ -23,7 +19,7 @@ class Sched extends Thread {
 		    if(n == Main.nbProcess) {
 				n = 0;
 			}
-		    if (currentProcess.relative_duration != currentProcess.duration) {
+		    if (currentProcess.relativeDuration != currentProcess.duration) {
 				Main.conds[Main.process].signal();
 			}
 			Main.lock.unlock();

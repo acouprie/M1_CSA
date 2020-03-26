@@ -1,16 +1,15 @@
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Condition;
 
 class Process extends Thread {
-    final Condition cond;
-    final int duration = 2;
-    int relative_duration = 0;
-    final int id;
-    
+	final int id;
+	final Condition cond;
+    final int periodicity;
+    final int duration;
+    int relativeDuration = 0;
+
     public void run() {
-		for(int i=1; i<=duration;i++) {
-			relative_duration = i;
+		for(int i=1; i<=duration; i++) {
+			relativeDuration = i;
 		    Main.lock.lock();
 		    if(Main.process != id | Main.sched) {
 				try {
@@ -22,17 +21,19 @@ class Process extends Thread {
 		    System.out.println("Process " + id);
 		    Main.sched = true;
 		    Main.csched.signal();
-		    if (duration != relative_duration)
+		    if (duration != relativeDuration)
 		    	Main.lock.unlock();
 		}
 		Sched.n += 1;
 		Main.lock.unlock();
 	}
 
-    public Process(int i, Condition c) {
-		cond=c;
-		id=i;
-    }
+    public Process(int i, Condition c, int p, int d) {
+		id = i;
+		cond = c;
+		periodicity = p;
+		duration = d;
+	}
 }
 
 

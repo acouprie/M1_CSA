@@ -1,32 +1,74 @@
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Condition;
 
+import java.io.File;  // Import the File class
+import java.io.FileNotFoundException;  // Import this class to handle errors
+
+
 class Main {
-	public static int nbProcess = 4;
+	public static String pathname = "inputsFiles/input1";
 
-	public static Process processes[] = new Process[nbProcess];
+	public static int nbProcess, timesteps;
+	public static String algo;
+
     public static Lock lock = new ReentrantLock();
-    public static Condition conds[] = new Condition[nbProcess];
-
 	public static Condition csched = lock.newCondition();
+
+	public static Process processes[];
+	public static Condition conds[];
 
     public static int process = 0;
     public static boolean sched = true;
     
     public static void main(String[] args) throws InterruptedException {
-	try {
-		for (int i = 0; i < nbProcess; i++) {
-			conds[i] = lock.newCondition();
-			processes[i] = new Process(i, conds[i]);
-			processes[i].start();
-		}
+		String[] raw_data = readFile(pathname).split(" ");
+		List<String> data = Arrays.asList(raw_data);
+		timesteps = Integer.parseInt(data.get(0));
+		algo = data.get(1);
+		nbProcess = Integer.parseInt(data.get(2));
 
-		Sched sc = new Sched();
-	    sc.start();
+		List<String> tasksDetails = new LinkedList<>(data.subList(3, data.size()));
+
+		processes = new Process[nbProcess];
+		conds = new Condition[nbProcess];
+
+		try {
+			for (int i = 0; i < nbProcess; i++) {
+				conds[i] = lock.newCondition();
+				processes[i] = new Process(
+						i,
+						conds[i],
+						Integer.parseInt(tasksDetails.get(1)),
+						Integer.parseInt(tasksDetails.get(0))
+				);
+				tasksDetails.remove(1);
+				tasksDetails.remove(0);
+				processes[i].start();
+			}
+
+			Sched sc = new Sched();
+		    sc.start();
 
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
     }
+
+    private static String readFile(String pathname) {
+        String data = "";
+		try {
+			File myObj = new File(pathname);
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				data += myReader.nextLine() + " ";
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+		return data;
+	}
 }
