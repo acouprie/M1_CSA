@@ -15,7 +15,6 @@ class Process extends Thread {
 
 			for (i = 0; i < duration; i++) {
 				Main.lock.lock();
-				relativeDuration = i + 1;
 				if (Main.process != id | Main.sched) {
 					try {
 						cond.await();
@@ -23,12 +22,9 @@ class Process extends Thread {
 						e.printStackTrace();
 					}
 				}
+				relativeDuration = i + 1;
 				Main.sched = true;
 				Main.csched.signal();
-				// When task is finished, wake the next one
-				if (duration == relativeDuration) {
-				    Sched.n++;
-				}
 				Main.lock.unlock();
 			}
 		}

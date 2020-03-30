@@ -1,7 +1,7 @@
 class Sched extends Thread {
-	public static int n = 0, timesteps = 0, violations = 0;
+	public static int n = 0, timesteps = 0, violations = 0, i = 0;
 	public void run() {
-		for(int i = 0; i < Main.timesteps; i++) {
+		for(i = 0; i < Main.timesteps; i++) {
 		    Main.lock.lock();
 		    if(!Main.sched) {
 				try {
@@ -16,46 +16,58 @@ class Sched extends Thread {
 				n = 0;
 			}
 
-			// process election
-			Main.process = n % Main.nbProcess;
-			Process currentProcess;
-			currentProcess = Main.processes[Main.process];
-
-			int nbProcessChecked = 0;
-			Boolean gap = false;
-			while(timesteps % currentProcess.periodicity != 0
-			&& currentProcess.relativeDuration != currentProcess.duration) {
-				if(nbProcessChecked == Main.nbProcess) {
-				    gap = true;
-					break;
+			for (int process = 0; process < Main.nbProcess; process++) {
+				if(i % Main.processes[process].periodicity == 0) {
+					Main.inQueue[process] = true;
 				}
-				if(n == Main.nbProcess) {
-					n = 0;
-				}
-				Main.process = n % Main.nbProcess;
-				currentProcess = Main.processes[Main.process];
-				nbProcessChecked++;
 			}
 
-			Main.sched = false;
-			Main.conds[Main.process].signal();
+			// process election
+			Main.process = n % Main.nbProcess;
+			Process currentProcess = Main.processes[Main.process];
 
 			// FIFO implementation
 		    // if process not finished, call it again
-		    if (gap || currentProcess.relativeDuration > currentProcess.duration) {
-				System.out.println(i + " -");
+			Boolean gap = true;
+			int duration = 0;
+            if (Main.inQueue[currentProcess.id] == true) {
+				duration = fifo(currentProcess);
 			} else {
-		    	System.out.println(i + " " + currentProcess.id);
-				Main.conds[Main.process].signal();
+            	for (int process = 0; process < Main.nbProcess; process++) {
+            	    if(Main.inQueue[process] == true) {
+            	    	gap = false;
+						duration = fifo(Main.processes[process]);
+						break;
+					} else {
+            	    	gap = true;
+					}
+				}
+            	if (gap) {
+					System.out.println(i + " -");
+				}
 			}
-
-			timesteps++;
+            n++;
 			Main.lock.unlock();
+			if (duration != 0) {
+				i += duration - 1;
+			}
 		}
 
 		// print violations and timesteps used
 		System.out.print("violation: " + violations + " timesteps: " + timesteps);
     }
+
+     private int fifo(Process currentProcess) {
+		int duration = 0;
+		 for (duration = 0; duration < currentProcess.duration; duration++) {
+			 System.out.println(i + duration + " " + currentProcess.id);
+			 Main.sched = false;
+			 Main.conds[Main.process].signal();
+			 timesteps++;
+		 }
+		 Main.inQueue[currentProcess.id] = false;
+		 return duration;
+	 }
 }
 		
 		

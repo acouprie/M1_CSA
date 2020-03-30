@@ -1,3 +1,4 @@
+import javax.swing.text.StyledEditorKit;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -17,6 +18,7 @@ class Main {
     public static Lock lock = new ReentrantLock();
 	public static Condition csched = lock.newCondition();
 
+	public static Boolean inQueue[];
 	public static Process processes[];
 	public static Condition conds[];
 
@@ -37,10 +39,13 @@ class Main {
 		processes = new Process[nbProcess];
 		// Create array of conditions
 		conds = new Condition[nbProcess];
+
+		inQueue = new Boolean[nbProcess];
 		// Create processes
 		try {
 			for (int i = 0; i < nbProcess; i++) {
 				conds[i] = lock.newCondition();
+				inQueue[i] = true;
 				processes[i] = new Process(
 						i,
 						conds[i],
