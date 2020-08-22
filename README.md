@@ -4,11 +4,3 @@
 <br />
 Portofolio of programs done during the M1 of Computer Science for 
 Aerospace in 2019 at the University Paul Sabatier of Toulouse in France.
-## Algorithms
-Some essais on algorithms
-## C
-C exercises
-## C++
-C++ exercises
-## Java
-Java exercises
